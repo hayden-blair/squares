@@ -38,10 +38,12 @@ for i in list(square.index):
                     group.append(int(col))
                     num_in_group.loc[num_in_group.index.isin(group),'num'] = len(group)
 
-            else:
-                groups.append(group)
-                break
-
+                if num_in_group.at[i,'num'] < square_num:
+                    pass
+                else:
+                    groups.append(group)
+                    break
+    
 
 print(num_in_group)
 print(groups)
