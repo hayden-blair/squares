@@ -28,21 +28,19 @@ for i in list(square.index):
 
         for col in cols:
 
-            if num_in_group.at[i,'num'] < square_num: 
-
-                mems = square[square.index.isin(group)]                
-
-                if (not 1 in mems[col].values and num_in_group.loc[num_in_group.index==int(col),'num'].values[0]<square_num):
-                #if person at index i has not been in a group with person at col    
-                    
-                    group.append(int(col))
-                    num_in_group.loc[num_in_group.index.isin(group),'num'] = len(group)
-
-                if num_in_group.at[i,'num'] < square_num:
-                    pass
-                else:
-                    groups.append(group)
-                    break
+            mems = square[square.index.isin(group)]                
+            
+            if (not 1 in mems[col].values and num_in_group.loc[num_in_group.index==int(col),'num'].values[0]<square_num):
+            #if person at index i has not been in a group with person at col    
+                
+                group.append(int(col))
+                num_in_group.loc[num_in_group.index.isin(group),'num'] = len(group)
+            
+            if num_in_group.at[i,'num'] < square_num:
+                pass
+            else:
+                groups.append(group)
+                break
     
 
 print(num_in_group)
