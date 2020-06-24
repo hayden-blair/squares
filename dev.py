@@ -19,8 +19,6 @@ groups = []
 for i in list(square.index):
     if num_in_group.at[i,'num'] < square_num: 
         #if true, person at index i needs more group members
-        print(f'{i} num_in_group: {num_in_group.at[i,"num"]}')
-        #if true, num in group should always be 0. I think...
 
         group = [i]
         #start new group for person at index i
@@ -29,15 +27,24 @@ for i in list(square.index):
         #get cols to check excluding index i self col
 
         for col in cols:
+
             if num_in_group.at[i,'num'] < square_num: 
-                if square.at[i,col] == 0:
+
+                mems = square[square.index.isin(group)]                
+
+                if (not 1 in mems[col].values and num_in_group.loc[num_in_group.index==int(col),'num'].values[0]<square_num):
                 #if person at index i has not been in a group with person at col    
-                #NOT JUST PERSON AT INDEX I, NEED TO CHECK FOR ALL PERSONS IN GROUP
                     
                     group.append(int(col))
                     num_in_group.loc[num_in_group.index.isin(group),'num'] = len(group)
 
+            else:
+                groups.append(group)
+                break
+
+
 print(num_in_group)
+print(groups)
                 
 
 
