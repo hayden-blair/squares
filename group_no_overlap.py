@@ -2,12 +2,12 @@ import pandas as pd
 import numpy as np
 
 
-def group_no_overlap(square, DEV_MODE=False):
+def group_no_overlap(square, square_num=None, skip_num=0):
 
     num_in_group = pd.DataFrame()
     
-    #square_num = int(np.sqrt(len(square)))
-    square_num = int(np.sqrt(len(square)))
+    if square_num == None:
+        square_num = int(np.sqrt(len(square)))
     
     #square['numbers'] = np.arange(int(square_num**2))
     num_in_group['num'] = np.zeros(len(square))
@@ -31,10 +31,16 @@ def group_no_overlap(square, DEV_MODE=False):
     
                 mems = square[square.index.isin(group)]                
                 
-                if (not 1 in mems[col].values and num_in_group.at[int(col),'num']<square_num):
+                is_good_group = True
+                if skip_num > 0:
+                    is_good_group = False
+                    skip_num -= 1
+
+                
+                if (not 1 in mems[col].values and num_in_group.at[int(col),'num']<square_num and is_good_group):
                 #if persons in group have not been in a group with person at col    
                 #AND person at col is not already in full group
-                    
+                    print(f'i: {i}, col: {col}') 
                     group.append(int(col))
                     num_in_group.loc[num_in_group.index.isin(group),'num'] = len(group)
                         
@@ -46,39 +52,13 @@ def group_no_overlap(square, DEV_MODE=False):
                     square.loc[square.index.isin(group),list(map(str,group))] = 1
                     break
 
+    full_solution = num_in_group['num'].values == square_num
+
+    if False in full_solution:
+        print(square)
+        return 1
+
     print(square)
-        
-    
-    print(num_in_group)
-    print(groups)
 
     return 0
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-for i in list(df.index):
-    group = [str(i)]
-    line = df[df.index == i]
-    cols = [col for col in list(line.columns[1:]) if(col != f'{i}' and '_' not in col)]
-    for col in cols:
-        if df.at[i,f'{i}_num_in_group'] < square:
-            if df.at[i,col] == 0:
-                group.append(col)
-                for j in group:
-                    mems = [mem for mem in group if mem != j]
-                    df.loc[df.index == int(j), mems] = 1
-                    df.loc[j+'_num_in_group'] = len(group)
-"""                
 
