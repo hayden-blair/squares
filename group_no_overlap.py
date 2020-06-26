@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 
-def group_no_overlap(square):
+def group_no_overlap(square, DEV_MODE=False):
 
     num_in_group = pd.DataFrame()
     
@@ -31,18 +31,19 @@ def group_no_overlap(square):
     
                 mems = square[square.index.isin(group)]                
                 
-                if (not 1 in mems[col].values and num_in_group.loc[num_in_group.index==int(col),'num'].values[0]<square_num):
+                if (not 1 in mems[col].values and num_in_group.at[int(col),'num']<square_num):
                 #if persons in group have not been in a group with person at col    
                 #AND person at col is not already in full group
                     
                     group.append(int(col))
                     num_in_group.loc[num_in_group.index.isin(group),'num'] = len(group)
-                    square.loc[square.index.isin(group),list(map(str,group))] = 1
+                        
                 
                 if num_in_group.at[i,'num'] < square_num:
                     pass
                 else:
                     groups.append(group)
+                    square.loc[square.index.isin(group),list(map(str,group))] = 1
                     break
 
     print(square)

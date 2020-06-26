@@ -14,6 +14,8 @@ while(True):
 
     if answer == 'y':
         group.group_no_overlap(square)
+    elif answer == 'yd':
+        group.group_no_overlap(square,DEV_MODE = True)
 
     else:
         break
